@@ -32,12 +32,12 @@ Questo progetto è un'applicazione che utilizza un'architettura moderna con un f
 1. **Clona il repository:**
    
    ```bash
-   git clone https://github.com/tosska/smartquiz.git
+   git clone https://github.com/tosska/SmartQuiz.git
 
 3. **Naviga nella cartella del back-end:**
    
    ```bash
-    cd smartquiz/backend
+    cd SmartQuiz/backend
    
 5. **Installa le dipendenze:**
    
