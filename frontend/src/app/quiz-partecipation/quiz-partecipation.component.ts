@@ -183,6 +183,7 @@ export class QuizPartecipationComponent {
     } else {
       this.showError = false; // Nascondi il messaggio di errore
       this.submitQuiz(); // Invia il quiz
+      this.router.navigate(['/']); 
     }
   }
   
