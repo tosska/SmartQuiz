@@ -1,0 +1,70 @@
+<section class="m-4 dark:text-white">
+
+  <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white mb-4">
+    My Quizzes
+  </h1>
+
+  <form [formGroup]="newQuizForm" (ngSubmit)="handleQuizSubmit()" class="flex items-center flex-wrap my-4">
+    
+    <!-- Campo Titolo -->
+    <input 
+      type="text" 
+      formControlName="title" 
+      placeholder="Insert a title here" 
+      class="flex-grow p-2 sm:mr-2 mb-4 w-full sm:w-fit bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500"
+    />
+    
+    <!-- Campo Numero Massimo di Errori -->
+    <input
+      type="number"
+      formControlName="maxErrors"
+      placeholder="Max Errors"
+      class="flex-grow p-2 sm:mr-2 mb-4 w-full sm:w-fit bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-teal-500 dark:focus:border-teal-500"
+    />
+
+    <div class="flex flex-col sm:flex-row sm:items-start w-full space-y-4 sm:space-y-0 sm:space-x-2">
+      <!-- Textarea per la descrizione -->
+      <textarea 
+        id="message" 
+        rows="4" 
+        class="block p-2.5 w-full max-w-[500px] h-32 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 overflow-auto resize-none"
+        formControlName="description" 
+        placeholder="Write the description here..."
+        wrap="soft"
+      ></textarea>
+    
+      <!-- Markdown Preview -->
+      <markdown 
+        [data]="newQuizForm.controls.description.value"
+        class="block p-2.5 w-full max-w-[500px] h-32 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white overflow-auto"
+        style="overflow-wrap: break-word; word-break: break-word;"
+      >
+        Visualizing markdown preview here...
+      </markdown>
+    </div>
+
+    <!-- Pulsante di invio -->
+    <button 
+      type="submit" 
+      class="p-2 w-full mt-4 text-white bg-amber-700 hover:bg-amber-800 focus:ring-4 focus:ring-amber-500 font-medium rounded-lg text-sm focus:outline-none transition duration-200 ease-in-out"
+    >
+      Share your quiz
+    </button>    
+
+    <!-- Messaggio di errore -->
+    <ng-container *ngIf="createQuizSubmitted && newQuizForm && newQuizForm.controls.title.errors && newQuizForm.controls.title.errors['required'] && newQuizForm.controls.description.errors && newQuizForm.controls.description.errors['required']">
+      <p class="form-error w-full mt-2 text-red-600">Title and Description cannot be empty!</p>
+    </ng-container>
+  </form>
+
+  <ul>
+    @for(item of quizzes; track item.id){
+      <app-quiz-item [quizItem]="item" (delete)="handleDelete($event)" class="flex justify-center items-center p-2"/>
+    } @empty {
+      <li class="flex items-center justify-center w-full px-4 py-2 border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+        No quizzes to show.
+      </li>
+    }
+  </ul>
+
+</section>

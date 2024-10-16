@@ -1,0 +1,29 @@
+<div class="max-w-sm w-full p-6 bg-white border border-gray-200 rounded-lg shadow-md transition-transform transform hover:scale-105 dark:bg-gray-900 dark:border-gray-700">
+  <a class="hover:underline">
+    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-words">
+      {{ quizItem.title }}
+    </h5>
+  </a>
+
+  <markdown 
+    [data]="quizItem.description" 
+    class="markdown-description mb-4 font-normal text-gray-700 dark:text-gray-400 break-words line-clamp-2"
+  >
+  </markdown>
+
+  <p class="text-gray-500 dark:text-gray-400 mb-4">Creato da: {{ quizItem.UserUserName }}</p>
+
+  <!-- Numero massimo di errori permessi -->
+  <p class="text-gray-700 dark:text-gray-400 mb-4">Numero massimo di errori: 
+    <span class="font-bold">{{ quizItem.maxErrors }}</span>
+  </p>
+
+  <div class="flex justify-center">
+    <a 
+      routerLink="/quiz-partecipation/{{quizItem.id}}" 
+      class="w-full p-3 text-white bg-amber-700 hover:bg-amber-800 rounded-lg font-medium text-center transition-colors duration-200"
+    >
+      Inizia Quiz
+    </a>
+  </div>
+</div>

@@ -1,0 +1,90 @@
+<section class="m-4 dark:text-white">
+  <!-- Titolo e descrizione -->
+  <div class="flex justify-center mt-10">
+    <figure class="max-w-full sm:max-w-screen-md w-full px-4">
+      <div class="flex items-center mb-4 justify-between">
+        <h3 class="text-2xl sm:text-3xl font-bold dark:text-white">{{ quiz.title }}</h3>
+      </div>
+      <blockquote class="mt-4 text-lg sm:text-xl font-medium text-gray-900 dark:text-white break-words">
+        <markdown 
+          [data]="quiz.description" 
+          class="markdown-description text-gray-900 dark:text-white"
+        ></markdown>
+      </blockquote>
+    </figure>
+  </div>
+
+  <!-- Numero massimo di errori permessi -->
+  <div class="flex justify-center mt-4">
+    <p class="text-base sm:text-lg font-medium text-gray-800 dark:text-gray-300">
+      Numero massimo di errori permessi: <span class="font-bold">{{ quiz.maxErrors }}</span>
+    </p>
+  </div>
+
+  <!-- QR Code e link condivisibile -->
+  <div *ngIf="qrCodeUrl" class="flex flex-col items-center mb-6">
+    <h2 class="text-lg font-bold text-center mb-2">QR Code for this Quiz</h2>
+    
+    <img [src]="qrCodeUrl" alt="QR Code" class="mb-4 border border-gray-300 rounded-lg shadow-sm max-w-[200px]" />
+
+    <label for="shareable-link" class="sr-only">Shareable Link</label>
+    <input 
+      id="shareable-link" 
+      type="text" 
+      class="bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full max-w-xs p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+      [value]="shareableLink" 
+      readonly
+    />
+
+    <button 
+      (click)="copyToClipboard()" 
+      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full max-w-xs py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-2 inline-flex items-center justify-center"
+    >
+      <span id="default-message">Copy</span>
+      <span id="success-message" class="hidden inline-flex items-center">
+        <svg class="w-3 h-3 text-white me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+        </svg>
+        Copied!
+      </span>
+    </button>
+  </div>
+
+  <!-- Griglia dei risultati -->
+  <div *ngIf="results.length > 0; else noResults" class="mt-6">
+    <!-- Titolo Risposte -->
+    <h2 class="text-lg font-semibold mb-4 text-center">Risposte ({{ results.length }})</h2>
+    
+    <!-- Griglia delle card -->
+    <div class="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      <div *ngFor="let result of results" class="bg-white dark:bg-gray-800 p-6 border border-gray-300 rounded-lg shadow-md hover:shadow-lg hover:border-blue-500 transition-transform transform hover:-translate-y-2">
+        <h4 class="font-bold text-xl dark:text-white">Username: {{ result.name }}</h4>
+        <p class="text-gray-600 dark:text-gray-400">Score: {{ result.score }}</p>
+        <p [ngClass]="{'text-green-500': result.passed, 'text-red-500': !result.passed}"> {{ result.passed ? 'Superato' : 'Non superato' }}</p>
+
+        <!-- Risposte correlate a questo risultato -->
+        <div *ngIf="result.id !== undefined && getResponsesForResult(result.id).length > 0" class="mt-4">
+          <h5 class="font-semibold dark:text-gray-300">Responses:</h5>
+          <ul class="mt-2 space-y-1">
+            <li *ngFor="let response of getResponsesForResult(result.id)" class="flex justify-between">
+              <span class="text-gray-600 dark:text-gray-400">
+                Question: {{ getQuestionText(response.QuestionId) }}<br>
+                Answer: {{ response.answer }}
+              </span>
+              <span [ngClass]="{'text-green-500': response.correct, 'text-red-500': !response.correct}">
+                ({{ response.correct ? 'Correct' : 'Wrong' }})
+              </span>
+            </li>
+          </ul>
+        </div>
+        <div *ngIf="result.id !== undefined && getResponsesForResult(result.id).length === 0">
+          <p class="text-gray-600 dark:text-gray-400">No responses for this result.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noResults>
+    <p class="text-center">No results to show.</p>
+  </ng-template>
+</section>

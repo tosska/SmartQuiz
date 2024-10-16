@@ -1,0 +1,34 @@
+<section class="w-full p-4 sm:p-8 dark:text-white">
+  <!-- Titolo di benvenuto -->
+  <div class="mb-28"> 
+    <h1 class="text-3xl sm:text-4xl font-bold text-center text-amber-700 font-serif dark:text-amber-500">
+      Benvenuto su SmartQuiz!
+    </h1>
+    <p class="text-lg sm:text-xl text-center text-gray-600 dark:text-gray-400 mt-6"> 
+      Scopri i quiz più popolari o crea il tuo.
+    </p>
+  </div>
+
+  <!-- Griglia dei quiz -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
+    @for(item of quizzes; track item.id) {
+      <app-quiz-card [quizItem]="item" class="w-full" />
+    } @empty {
+      <div class="col-span-1 sm:col-span-2 lg:col-span-3 flex flex-col items-center justify-center py-12 bg-transparent">
+        
+        <!-- Messaggio di avviso -->
+        <h3 class="text-xl sm:text-2xl font-semibold text-gray-600 dark:text-gray-300 mb-2 text-center">
+          Nessun quiz disponibile
+        </h3>
+        <p class="text-base sm:text-lg text-gray-500 dark:text-gray-400 text-center mb-6"> 
+          Al momento non ci sono quiz da mostrare. Torna più tardi o crea il tuo quiz.
+        </p>
+
+        <!-- Pulsante per creare un quiz -->
+        <a routerLink="/my-quizzes" class="px-6 py-3 bg-amber-700 text-white rounded-lg shadow hover:bg-amber-600 dark:bg-amber-500 dark:hover:bg-amber-400 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-amber-500 dark:focus:ring-amber-600">
+          Crea un quiz
+        </a>
+      </div>
+    }
+  </div>
+</section>

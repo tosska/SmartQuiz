@@ -1,0 +1,78 @@
+<section class="m-4 dark:text-white">
+
+  <!-- Titolo e descrizione -->
+  <div class="flex justify-center mt-10">
+    <figure class="max-w-full sm:max-w-screen-md w-full px-4">
+      <div class="flex items-center mb-4">
+        <h3 class="text-2xl sm:text-3xl font-bold dark:text-white">{{ quiz.title }}</h3>
+      </div>
+      <blockquote>
+        <markdown [data]="quiz.description" class="markdown-description text-lg sm:text-2xl font-semibold text-gray-900 dark:text-white break-words"></markdown>
+      </blockquote>
+      
+      <!-- Numero massimo di errori permessi -->
+      <p class="text-gray-700 dark:text-gray-400 mb-4">Numero massimo di errori: 
+        <span class="font-bold">{{ quiz.maxErrors }}</span>
+      </p>
+    </figure>
+  </div>
+
+  <!-- Form per inserire nuove domande -->
+  <form [formGroup]="newQuestionForm" (ngSubmit)="handleQuestionSubmit()" class="my-8 max-w-md mx-auto p-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md">
+    
+    <!-- Selezione del tipo di domanda -->
+    <div class="mb-4">
+      <label for="type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200">Tipo di Domanda:</label>
+      <select formControlName="type" id="type" class="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md">
+        <option value="multiple">Risposta Multipla</option>
+        <option value="open">Risposta Aperta</option>
+      </select>
+    </div>
+
+    <!-- Testo della domanda -->
+    <div class="mb-4">
+      <label for="questionText" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200">Testo della Domanda:</label>
+      <textarea formControlName="questionText" id="questionText" rows="3" class="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md" placeholder="Inserisci qui la tua domanda"></textarea>
+    </div>
+
+    <!-- Opzioni (solo per domande a risposta multipla) -->
+    <div *ngIf="newQuestionForm.get('type')?.value === 'multiple'" class="mb-4">
+      <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200">Opzioni:</label>
+      <div class="space-y-2" formArrayName="options">
+        <input formControlName="0" type="text" class="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md" placeholder="Opzione 1">
+        <input formControlName="1" type="text" class="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md" placeholder="Opzione 2">
+        <input formControlName="2" type="text" class="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md" placeholder="Opzione 3">
+        <input formControlName="3" type="text" class="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md" placeholder="Opzione 4">
+      </div>
+    </div>
+
+    <!-- Risposta corretta -->
+    <div class="mb-4">
+      <label for="correctAnswer" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-200">Risposta Corretta:</label>
+      <input formControlName="correctAnswer" id="correctAnswer" type="text" class="w-full p-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md" placeholder="Inserisci la risposta corretta">
+    </div>
+
+    <!-- Pulsante di invio -->
+    <button type="submit" class="w-full p-2 text-white bg-amber-700 hover:bg-amber-800 rounded-lg font-medium">Aggiungi Domanda</button>
+
+    <!-- Messaggio di errore se i dati non sono validi -->
+    <ng-container *ngIf="createQuestionSubmitted && newQuestionForm.invalid">
+      <p class="mt-2 text-red-600">I dati inseriti non sono validi. Verifica i campi.</p>
+    </ng-container>
+
+  </form>
+
+  <!-- Domande -->
+  <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-full px-4">
+    @for(item of questions; track item.id) {
+      <li class="mb-4 transition-transform duration-300 hover:scale-105"> 
+        <app-question-item [questionItem]="item" (delete)="onDeleteQuestion($event)" class="hover:shadow-lg transition-shadow duration-300"></app-question-item>
+      </li>
+    } @empty {
+      <li class="flex items-center justify-center w-full px-4 py-2 border-b border-gray-200 rounded-lg dark:border-gray-600">
+        No Questions to show.
+      </li>
+    }
+  </ul>
+
+</section>
